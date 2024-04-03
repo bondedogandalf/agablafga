@@ -1,0 +1,24 @@
+name: Reference
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: teste
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print Branch Name
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BRANCH_NAME=${{ github.event.pull_request.head.ref }}
+          else
+           BRANCH_NAME=$(echo "${{ github.ref_name }}" | sed 's/[^a-zA-Z]*//g')
+          fi
+          echo "Branch Name: $BRANCH_NAME"
